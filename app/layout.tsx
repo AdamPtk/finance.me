@@ -6,9 +6,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "fintech.me",
+  title: "finance.me",
   description:
-    "Your income is your most powerful wealth-building tool. fintech.me helps you make the most of it.",
+    "Your income is your most powerful wealth-building tool. finance.me helps you make the most of it.",
 };
 
 export default function RootLayout({
