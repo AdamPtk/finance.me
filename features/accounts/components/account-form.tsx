@@ -13,7 +13,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { insertAccountsSchema } from "@/db/schema";
-import { on } from "events";
 
 const formSchema = insertAccountsSchema.pick({
   name: true,
