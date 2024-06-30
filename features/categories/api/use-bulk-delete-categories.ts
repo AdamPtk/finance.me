@@ -14,8 +14,6 @@ type RequestType = InferRequestType<
 export const useBulkDeleteCategories = () => {
   const queryClient = useQueryClient();
 
-  console.log(queryClient.invalidateQueries);
-
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (json) => {
       const res = await client.api.categories["bulk-delete"].$post({ json });
