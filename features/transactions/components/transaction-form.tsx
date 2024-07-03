@@ -3,6 +3,8 @@ import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Select } from "@/components/select";
+import { DatePicker } from "@/components/date-picker";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +15,11 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { insertTransactionSchema } from "@/db/schema";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const formSchema = z.object({
   date: z.coerce.date(),
@@ -59,7 +66,8 @@ export const TransactionForm = ({
   });
 
   const handleSubmit = (values: FormValues) => {
-    onSubmit(values);
+    console.log({ values });
+    // onSubmit(values);
   };
   const handleDelete = () => {
     onDelete?.();
@@ -72,16 +80,53 @@ export const TransactionForm = ({
         className="space-y-4 pt-4"
       >
         <FormField
-          name="name"
+          name="date"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="name">Name</FormLabel>
               <FormControl>
-                <Input
+                <DatePicker
+                  value={field.value}
+                  onChange={field.onChange}
                   disabled={disabled}
-                  placeholder="e.g. Cash, Bank, Credit Card"
-                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="accountId"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Account</FormLabel>
+              <FormControl>
+                <Select
+                  placeholder="Select an account"
+                  options={accountOptions}
+                  onCreate={onCreateAccount}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="categoryId"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Select
+                  placeholder="Select a category"
+                  options={categoryOptions}
+                  onCreate={onCreateCategory}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
                 />
               </FormControl>
             </FormItem>
@@ -90,6 +135,16 @@ export const TransactionForm = ({
         <Button className="w-full" disabled={disabled}>
           {id ? "Save changes" : "Create transaction"}
         </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button disabled={disabled} variant={"outline"}>
+              elo
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto">
+            <button>elo</button>
+          </PopoverContent>
+        </Popover>
         {!!id && (
           <Button
             type="button"
