@@ -36,9 +36,12 @@ export const Select = ({
       styles={{
         control: (base) => ({
           ...base,
+          cursor: "text",
           borderColor: "#e2e8f0",
+          boxShadow: "0 0 0 1px #e2e8f0",
           ":hover": {
             borderColor: "#e2e8f0",
+            boxShadow: "0 0 0 1px #e2e8f0",
           },
         }),
       }}

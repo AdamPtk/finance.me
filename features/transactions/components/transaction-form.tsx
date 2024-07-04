@@ -5,7 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Select } from "@/components/select";
 import { DatePicker } from "@/components/date-picker";
+import { AmountInput } from "@/components/amount-input";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,12 +16,8 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { convertAmountToMiliunits } from "@/lib/utils";
 import { insertTransactionSchema } from "@/db/schema";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 const formSchema = z.object({
   date: z.coerce.date(),
@@ -66,8 +64,10 @@ export const TransactionForm = ({
   });
 
   const handleSubmit = (values: FormValues) => {
-    console.log({ values });
-    // onSubmit(values);
+    const amount = parseFloat(values.amount);
+    const amountInMiliunits = convertAmountToMiliunits(amount);
+
+    onSubmit({ ...values, amount: amountInMiliunits });
   };
   const handleDelete = () => {
     onDelete?.();
@@ -84,6 +84,7 @@ export const TransactionForm = ({
           control={form.control}
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Date</FormLabel>
               <FormControl>
                 <DatePicker
                   value={field.value}
@@ -132,19 +133,54 @@ export const TransactionForm = ({
             </FormItem>
           )}
         />
+        <FormField
+          name="payee"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Payee</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Add a payee"
+                  disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="amount"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <AmountInput {...field} placeholder="0.00" />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="notes"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  value={field.value ?? ""}
+                  placeholder="Optional notes"
+                  disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <Button className="w-full" disabled={disabled}>
           {id ? "Save changes" : "Create transaction"}
         </Button>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button disabled={disabled} variant={"outline"}>
-              elo
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto">
-            <button>elo</button>
-          </PopoverContent>
-        </Popover>
         {!!id && (
           <Button
             type="button"
