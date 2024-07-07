@@ -22,7 +22,7 @@ import { insertTransactionSchema } from "@/db/schema";
 const formSchema = z.object({
   date: z.coerce.date(),
   accountId: z.string(),
-  categoryId: z.string(),
+  categoryId: z.string().optional(),
   payee: z.string(),
   amount: z.string(),
   notes: z.string().nullable().optional(),
