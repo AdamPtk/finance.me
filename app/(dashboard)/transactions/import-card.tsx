@@ -1,5 +1,9 @@
+import { useState } from "react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+import { ImportTable } from "./import-table";
 
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
@@ -17,6 +21,13 @@ type Props = {
 };
 
 export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
+  const [selectedCoulmns, setSelectedColumns] = useState<SelectedColumnsState>(
+    {}
+  );
+
+  const headers = data[0];
+  const body = data.slice(1);
+
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
@@ -30,7 +41,14 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
             </Button>
           </div>
         </CardHeader>
-        <CardContent>Hello</CardContent>
+        <CardContent>
+          <ImportTable
+            headers={headers}
+            body={body}
+            selectedCoulmns={selectedCoulmns}
+            onTableHeadSelectChange={() => {}}
+          />
+        </CardContent>
       </Card>
     </div>
   );
